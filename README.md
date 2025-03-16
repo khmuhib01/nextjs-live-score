@@ -83,7 +83,7 @@ yarn dev
 ### Live Score Updates
 
 - Fetches match data from CricAPI
-- Updates automatically every 30 seconds
+- Updates automatically every 60 seconds
 - Manual refresh option available
 
 ### Match Information
