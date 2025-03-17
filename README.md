@@ -47,13 +47,7 @@ npm install
 yarn install
 ```
 
-3. Create a `.env.local` file in the root directory and add your CricAPI key:
-
-```env
-NEXT_PUBLIC_CRICAPI_KEY=your_api_key_here
-```
-
-4. Start the development server:
+3. Start the development server:
 
 ```bash
 npm run dev
@@ -61,7 +55,7 @@ npm run dev
 yarn dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
 ## Project Structure
 
