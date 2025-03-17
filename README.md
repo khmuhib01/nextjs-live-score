@@ -7,7 +7,7 @@ A real-time cricket score tracking application built with Next.js that provides 
 ## Features
 
 - 🏏 Real-time cricket match updates
-- 🔄 Auto-refresh every 30 seconds
+- 🔄 Auto-refresh every 60 seconds
 - 📱 Responsive design for all devices
 - ⚡ Fast and efficient data loading
 - 🎯 Error handling and loading states
