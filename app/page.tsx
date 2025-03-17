@@ -33,8 +33,6 @@ export default function Home() {
 
 			setFullResponse(data);
 
-			console.log('API Response:', data);
-
 			if (data.status !== 'success') {
 				throw new Error(data.message || 'Failed to fetch matches');
 			}
@@ -56,7 +54,7 @@ export default function Home() {
 			setError(null);
 		} catch (err) {
 			setError('Failed to fetch cricket matches. Please try again later.');
-			setMatches([]); // Reset matches on error
+			setMatches([]);
 		} finally {
 			setLoading(false);
 		}
@@ -69,7 +67,7 @@ export default function Home() {
 
 		initFetch();
 
-		const interval = setInterval(fetchMatches, 60000); // Refresh every 30 seconds
+		const interval = setInterval(fetchMatches, 60000); // Refresh every minute
 		return () => clearInterval(interval);
 	}, []);
 
@@ -83,61 +81,60 @@ export default function Home() {
 	};
 
 	return (
-		<div className="min-h-screen bg-gray-50">
-			<div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
+			<div className="max-w-7xl mx-auto py-10 px-6">
 				<div className="flex justify-between items-center mb-8">
-					<h1 className="text-3xl font-bold text-gray-900">Live Cricket Scores</h1>
+					<h1 className="text-4xl font-bold text-gray-900 tracking-wide">🏏 Live Cricket Scores</h1>
 					<button
 						onClick={handleRefresh}
 						disabled={loading}
-						className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
+						className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg shadow-lg hover:bg-blue-700 transition-all disabled:opacity-50"
 					>
-						<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+						<RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
 						Refresh
 					</button>
 				</div>
 
+				{/* API Limit Message */}
 				{fullResponse?.status === 'failure' && (
-					<div className="bg-card text-card-foreground rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-						<pre className="text-sm text-muted-foreground">
-							{fullResponse.reason} (You might have exceeded the API limit)
-						</pre>
-					</div>
-				)}
-
-				{fullResponse?.status && fullResponse.info === 'failure' && (
-					<div className="bg-card text-card-foreground rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-						<pre className="text-sm text-muted-foreground">{JSON.stringify(fullResponse.info, null, 2)}</pre>
+					<div className="bg-red-100 border border-red-400 text-red-700 p-4 rounded-lg shadow-md mb-6">
+						<strong>⚠ API Limit Reached:</strong> {fullResponse.reason}
 					</div>
 				)}
 
 				{loading ? (
 					<div className="flex justify-center items-center h-64">
-						<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+						<div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500"></div>
 					</div>
 				) : error ? (
-					<div className="bg-destructive/10 text-destructive p-4 rounded-md">{error}</div>
+					<div className="bg-red-100 border border-red-400 text-red-700 p-4 rounded-lg shadow-md">{error}</div>
 				) : matches.length === 0 ? (
-					<div className="text-center text-gray-500 py-8">No matches available at the moment</div>
+					<div className="text-center text-gray-500 py-8 text-lg">No matches available at the moment</div>
 				) : (
 					<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 						{matches.map((match) => (
 							<div
 								key={match.id}
-								className="bg-card text-card-foreground rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+								className="bg-white text-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow transform hover:-translate-y-1"
 							>
-								<h3 className="font-semibold text-lg mb-2">{match.name}</h3>
-								<div className="space-y-2 text-sm text-muted-foreground">
-									<p>{match.venue}</p>
-									<p>{new Date(match.date).toLocaleDateString()}</p>
-									<div className="mt-4">
+								<h3 className="font-bold text-xl mb-3">{match.name}</h3>
+								<div className="space-y-2 text-sm">
+									<p className="font-medium text-gray-600">📍 {match.venue}</p>
+									<p className="font-medium text-gray-600">📅 {new Date(match.date).toLocaleDateString()}</p>
+									<div className="mt-4 space-y-1">
 										{match.score?.map((score, index) => (
-											<p key={index} className="text-base text-foreground">
+											<p key={index} className="text-base text-gray-900 font-semibold">
 												{formatScore(score)}
 											</p>
 										))}
 									</div>
-									<p className="mt-4 text-base font-medium text-primary">{match.status}</p>
+									<p
+										className={`mt-4 text-lg font-semibold ${
+											match.status.includes('Live') ? 'text-red-600' : 'text-green-600'
+										}`}
+									>
+										🔴 {match.status}
+									</p>
 								</div>
 							</div>
 						))}
